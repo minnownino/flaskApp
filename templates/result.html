@@ -4,7 +4,7 @@
 <head>
     <title>TDI Database Search</title>
     <meta charset="utf-8">
-
+	<meta charset="utf-8">
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
@@ -35,8 +35,8 @@
     <!-- FastClick -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
     <!-- AdminLTE App -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script> 
-    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script>
+
 
 
 </head>
@@ -61,11 +61,13 @@
         <div class="jumbotron">
             <h1>TDI Database</h1>
             <p class="lead"></p>
-            <p><a class="btn btn-lg btn-success" href="showSignUp" role="button">Search!</a>
-	    <form  method="post" action="/test/">
-		<input name="SGA" id="inputName" placeholder="Name" required autofocus>
-		<button>Submit</button>
-	    </form>
+            <p><a class="btn btn-lg btn-success" href="showSignUp" role="button">Search! {{name}}</a>
+	    <form class="form-signin">
+		<label for="inputName" class="sr-only">INPUT SGAname</label>
+		<input type="name" name="SGA" id="inputName" class="form-control" placeholder="Name" required autofocus>
+		<button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Submit</button>
+	      </form>
+            </p>
         </div>
 
         <div class="row marketing">
