@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+{% block result %}
+<style>
+	.bar-legend {
+    list-style: none;
+    margin: 0;
+    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+    font-size: 12px;
+    font-color: #666;
+	}
+
+	.bar-legend span {
+	    display: inline-block;
+	    height: 10px;
+	    width: 10px;
+	    margin-right: 10px;
+	}
+</style>
+<div>
+	<!-- plot -->
+    <!-- BAR CHART -->
+    <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title">Bar Chart</h3>
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="chart">
+          <canvas id="barChart" style="height:230px"></canvas>
+        </div>
+      </div>
+      <!-- /.box-body -->
+      <!-- legend -->
+    <div id="legend"></div>      
+    </div>
+
+</div>
+
+<div>
+	<!-- deg table -->
+
+</div>
+
+<script>
+      $(function () {
+        /* ChartJS
+         * -------
+         * Here we will create a few charts using ChartJS
+         */
+
+        //--------------
+        //- AREA CHART -
+        //--------------	
+        var areaChartData = {
+          labels: ["BLCA", "BRCA", "COAD", "ESCA", "GBM", "HNSC", "KIRC", "KIRP", "LIHC", "LUAD", "LUSC", "OV", "PRAD", "READ", "STAD", "UCEC"],
+          datasets: [
+            {
+              label: "SGA events",
+              fillColor: "#666666",
+              strokeColor: "#666666",
+              pointColor: "#666666",
+              pointStrokeColor: "#666666",
+              pointHighlightFill: "#666666",
+              pointHighlightStroke: "#666666",
+              data: [65, 59, 0, 81, 56, 55, 40]
+            },
+            {
+              label: "Driver events",
+              fillColor: "rgba(60,141,188,0.9)",
+              strokeColor: "rgba(60,141,188,0.8)",
+              pointColor: "#3b8bba",
+              pointStrokeColor: "rgba(60,141,188,1)",
+              pointHighlightFill: "#fff",
+              pointHighlightStroke: "rgba(60,141,188,1)",
+              data: [28, 48, 40, 19, 86, 27, 90]
+            }
+          ]
+        };
+	//var data = {{data}}
+	//areaChartData.labels = {{cancer_types}}
+	areaChartData.datasets[0].data = {{all_distribution}}
+	areaChartData.datasets[1].data = {{driver_distribution}}	
+
+        //-------------
+        //- BAR CHART -
+        //-------------
+        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+        var barChart = new Chart(barChartCanvas);
+        var barChartData = areaChartData;
+        barChartData.datasets[1].fillColor = "#00a65a";
+        barChartData.datasets[1].strokeColor = "#00a65a";
+        barChartData.datasets[1].pointColor = "#00a65a";
+        var barChartOptions = {
+          //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
+          scaleBeginAtZero: true,
+          //Boolean - Whether grid lines are shown across the chart
+          scaleShowGridLines: true,
+          //String - Colour of the grid lines
+          scaleGridLineColor: "rgba(0,0,0,.05)",
+          //Number - Width of the grid lines
+          scaleGridLineWidth: 1,
+          //Boolean - Whether to show horizontal lines (except X axis)
+          scaleShowHorizontalLines: true,
+          //Boolean - Whether to show vertical lines (except Y axis)
+          scaleShowVerticalLines: true,
+          //Boolean - If there is a stroke on each bar
+          barShowStroke: true,
+          //Number - Pixel width of the bar stroke
+          barStrokeWidth: 2,
+          //Number - Spacing between each of the X value sets
+          barValueSpacing: 5,
+          //Number - Spacing between data sets within X values
+          barDatasetSpacing: 1,
+          //String - A legend template
+          //Boolean - whether to make the chart responsive
+          responsive: true,
+          maintainAspectRatio: true
+        };
+
+        barChartOptions.datasetFill = false;
+        var chart = barChart.Bar(barChartData, barChartOptions);
+        $("#legend").html(chart.generateLegend());
+      });
+    </script>
+{% endblock %}
