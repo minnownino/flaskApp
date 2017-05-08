@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, json, url_for, Response, make_response, send_file, flash
+from flask import Flask, render_template, request, json, url_for, Response, make_response, send_file, flash, jsonify
 from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
 #from flask_mysqldb import MySQL
@@ -12,7 +12,7 @@ mysql = MySQL(app)
 app.config['MYSQL_DATABASE_USER'] = ''
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
 app.config['MYSQL_DATABASE_DB'] = ''
-app.config['MYSQL_DATABASE_HOST'] = ''
+app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 mysql.init_app(app)
 
@@ -55,7 +55,8 @@ def test():
         component.append(deg[0])
         component.append(str(int(deg[1])))
         data["data"].append(component)
-    return render_template('result_all.html',  all_distribution = all_distribution, driver_distribution = driver_distribution, cancer_types = cancer_types, SGA=SGA.upper())
+    print json.dumps(data["data"])
+    return render_template('result_all.html',  data = json.dumps(data["data"]), all_distribution = all_distribution, driver_distribution = driver_distribution, cancer_types = cancer_types, SGA=SGA.upper())
     
 @app.route('/')
 def main():
@@ -69,28 +70,31 @@ def main():
 @app.route('/getTripletCSV/', methods=['GET','POST'])
 def getTripletCSV():
     import csv
-    SGAs = request.form['SGAs']
-    DEGs = request.form['DEGs']
-    tumors = request.form['Tumors']
+    SGAs = request.form['SGAs'].replace(" ", "")
+    DEGs = request.form['DEGs'].replace(" ", "")
+    tumors = request.form['Tumors'].replace(" ", "")
+    if len(SGAs) == 0 and len(DEGs) == 0 and len(tumors) == 0:
+        flash("Please input your interest genes and/or tumors")
+        return render_template('search.html')
     print SGAs
     print DEGs
     print tumors
-    if tumors is not None:
+    if len(tumors) != 0:
         tumors = str(tumors).split(',')
     else:
         tumors = []
-    if SGAs is not None:
+    if len(SGAs) != 0:
         SGAs = str(SGAs).split(',')
     else:
         SGAs = []
-    if DEGs is not None:
+    if len(DEGs) != 0:
         DEGs = str(DEGs).split(',')
     else:
         DEGs = []
     result = getTriplet(tumors, SGAs, DEGs)
     with open("out.csv", "wb") as csv_file:              # Python 2 version
         csv_writer = csv.writer(csv_file)
-        csv_writer = csv.writerow(["SGAname", "DEGname", "Tumorname"])
+        #csv_writer = csv.writerow(["SGAname", "DEGname", "Tumorname"])
         csv_writer.writerows(result)
     #return_file = open("out.csv", 'r')
     #csv = '1,2,3\n4,5,6\n'

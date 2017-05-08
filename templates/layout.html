@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 2 | ChartJS</title>
     <!-- Tell the browser to be responsive to screen width -->
@@ -31,18 +32,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.js"></script>
     <!-- AdminLTE App -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/2.3.11/js/app.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 </head>
 
   <body>
-   <div class="container">
+   <div class="container-fluid" style="min-height:100% width:60%">
       <div class="header">
           <nav>
               <ul class="nav nav-pills pull-right">
-                  <li role="presentation" class="active"><a href="#">Home</a>
+                  <li role="presentation" class="active"><a href="/search/">Home</a>
                   </li>
                   <li role="presentation"><a href="#"></a>
                   </li>
                   <li role="presentation"><a href="#">About Us</a>
+                  </li>
+                  <li role="presentation"><a href="/search/">Search</a>
                   </li>
               </ul>
           </nav>
@@ -53,6 +57,7 @@
           {% for message in messages %}
             <div class="alert alert-info alert-dismissable" role="alert">
               {{message}}
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
             </div>
           {% endfor %}
         {% endif %}

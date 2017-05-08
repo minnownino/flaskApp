@@ -164,10 +164,11 @@ def getTriplet(tumors, SGAs, DEGs):
         querylist.append(SGAquery)
     if len(DEGs) != 0:
         querylist.append(DEGquery)
+    print "query " + str(querylist)
     mydb = MySQLdb.connect("localhost", "root", "root", "TDI")
     cursor = mydb.cursor()
     query = "select driver_gene_name, DEG_name, tumor_name from SigSGADEGTumor where " + " and ".join(querylist)
-    #print query
+    print query
     cursor.execute(query)
     result = cursor.fetchall()
     return result
