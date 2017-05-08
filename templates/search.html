@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block search %}
+<div>
+<form class="form-group" role="search" method="POST" action="/layout/">
+  <div class="form-group">
+    <label>Search Gene:</label>
+    <input name="SGA" type="text" class="form-control" placeholder="Search" >
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+</div>
+<div>
+<form class="form-group" role="search" method="POST" action="/getTripletCSV/">
+  <div class="form-group">
+    <label>SGA set:</label><textarea name="SGAs" type="text" class="form-control" placeholder="SGAs" ></textarea>
+    <label>DEG set:</label><textarea name="DEGs" type="text" class="form-control" placeholder="DEGs" ></textarea>
+    <label>Tumor set:</label><textarea name="Tumors" type="text" class="form-control" placeholder="Tumors" ></textarea>
+  </div>
+  <button type="submit" class="btn btn-default">Get CSV</button>
+</form>
+</div>
+{% endblock %}
