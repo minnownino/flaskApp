@@ -3,6 +3,7 @@ from flask.ext.mysql import MySQL
 from werkzeug import generate_password_hash, check_password_hash
 #from flask_mysqldb import MySQL
 from queries import *
+from flask import jsonify
 
 app = Flask(__name__)
 mysql = MySQL(app)
