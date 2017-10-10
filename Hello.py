@@ -14,6 +14,14 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 mysql.init_app(app)
 
+@app.route('/getgene/')
+def getgene():
+    jsonobject = [{"mut": 95, "cancertype": "BLCA", "del": 5, "amp": 0}, {"mut": 245, "cancertype": "BRCA", "del": 6, "amp": 0}, {"mut": 104, "cancertype": "COAD", "del": 2, "amp": 0}, {"mut": 129, "cancertype": "ESCA", "del": 2, "amp": 0}, {"mut": 66, "cancertype": "GBM", "del": 5, "amp": 0}, {"mut": 316, "cancertype": "HNSC", "del": 3, "amp": 1}, {"mut": 17, "cancertype": "KIRC", "del": 0, "amp": 0}, {"mut": 4, "cancertype": "KIRP", "del": 0, "amp": 0}, {"mut": 41, "cancertype": "LIHC", "del": 2, "amp": 0}, {"mut": 186, "cancertype": "LUAD", "del": 3, "amp": 0}, {"mut": 108, "cancertype": "LUSC", "del": 3, "amp": 0}, {"mut": 269, "cancertype": "OV", "del": 2, "amp": 4}, {"mut": 44, "cancertype": "PRAD", "del": 33, "amp": 0}, {"mut": 57, "cancertype": "READ", "del": 0, "amp": 0}, {"mut": 80, "cancertype": "STAD", "del": 3, "amp": 0}, {"mut": 41, "cancertype": "UCEC", "del": 0, "amp": 0}, {"mut": 1802, "cancertype": "all", "del": 3, "amp": 4}];
+    return jsonify(jsonobject)
+@app.route('/stack/')
+def stack():
+    return render_template('stack_trial1.html')
+
 @app.route('/test/')
 def test():
     name = request.form['SGA']
