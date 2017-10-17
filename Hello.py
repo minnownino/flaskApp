@@ -4,6 +4,7 @@ from werkzeug import generate_password_hash, check_password_hash
 #from flask_mysqldb import MySQL
 from queries import *
 from flask import jsonify
+from queries import *
 
 app = Flask(__name__)
 mysql = MySQL(app)
@@ -15,10 +16,21 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 app.config['MYSQL_DATABASE_PORT'] = 3306
 mysql.init_app(app)
 
-@app.route('/getgene/')
-def getgene():
-    jsonobject = [{"mut": 95, "cancertype": "BLCA", "del": 5, "amp": 0}, {"mut": 245, "cancertype": "BRCA", "del": 6, "amp": 0}, {"mut": 104, "cancertype": "COAD", "del": 2, "amp": 0}, {"mut": 129, "cancertype": "ESCA", "del": 2, "amp": 0}, {"mut": 66, "cancertype": "GBM", "del": 5, "amp": 0}, {"mut": 316, "cancertype": "HNSC", "del": 3, "amp": 1}, {"mut": 17, "cancertype": "KIRC", "del": 0, "amp": 0}, {"mut": 4, "cancertype": "KIRP", "del": 0, "amp": 0}, {"mut": 41, "cancertype": "LIHC", "del": 2, "amp": 0}, {"mut": 186, "cancertype": "LUAD", "del": 3, "amp": 0}, {"mut": 108, "cancertype": "LUSC", "del": 3, "amp": 0}, {"mut": 269, "cancertype": "OV", "del": 2, "amp": 4}, {"mut": 44, "cancertype": "PRAD", "del": 33, "amp": 0}, {"mut": 57, "cancertype": "READ", "del": 0, "amp": 0}, {"mut": 80, "cancertype": "STAD", "del": 3, "amp": 0}, {"mut": 41, "cancertype": "UCEC", "del": 0, "amp": 0}, {"mut": 1802, "cancertype": "all", "del": 3, "amp": 4}];
-    return jsonify(jsonobject)
+@app.route('/getgene/<sga>')
+def getgene(sga):
+    #jsonobject = [{"mut": 95, "cancertype": "BLCA", "del": 5, "amp": 0}, {"mut": 245, "cancertype": "BRCA", "del": 6, "amp": 0}, {"mut": 104, "cancertype": "COAD", "del": 2, "amp": 0}, {"mut": 129, "cancertype": "ESCA", "del": 2, "amp": 0}, {"mut": 66, "cancertype": "GBM", "del": 5, "amp": 0}, {"mut": 316, "cancertype": "HNSC", "del": 3, "amp": 1}, {"mut": 17, "cancertype": "KIRC", "del": 0, "amp": 0}, {"mut": 4, "cancertype": "KIRP", "del": 0, "amp": 0}, {"mut": 41, "cancertype": "LIHC", "del": 2, "amp": 0}, {"mut": 186, "cancertype": "LUAD", "del": 3, "amp": 0}, {"mut": 108, "cancertype": "LUSC", "del": 3, "amp": 0}, {"mut": 269, "cancertype": "OV", "del": 2, "amp": 4}, {"mut": 44, "cancertype": "PRAD", "del": 33, "amp": 0}, {"mut": 57, "cancertype": "READ", "del": 0, "amp": 0}, {"mut": 80, "cancertype": "STAD", "del": 3, "amp": 0}, {"mut": 41, "cancertype": "UCEC", "del": 0, "amp": 0}, {"mut": 1802, "cancertype": "all", "del": 3, "amp": 4}];
+    data = allCTdistribution(sga)
+    return jsonify(data)
+
+@app.route('/gettopdegs/<sga>')
+def getTopDEGs(sga):
+    data = getTopDEGsPerCT(sga)
+    return jsonify(data)
+
+@app.route('/scatter/<sga>')
+def getscatter(sga):
+    return tumorInfo(sga)
+
 @app.route('/stack/')
 def stack():
     return render_template('stack_trial1.html')
@@ -52,5 +64,6 @@ def result():
     driver_distribution = list(int(i[1]) for i in driver_distribution)
     return render_template('result.html', all_distribution = all_distribution, driver_distribution = driver_distribution, cancer_types = cancer_types)
     #return render_template('result.html', name = name)
+
 if __name__ == '__main__':
     app.run()
