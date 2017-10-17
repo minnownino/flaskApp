@@ -8,102 +8,23 @@
 </style>
 
 <body>
-  <svg width="auto" height="100">
+  <p><input type="text" id="fname" value="TP53">TP53</p>
+  <svg width="100%" height="100">
   	<g></g>
   </svg>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <script src="/static/js/stack.js"></script>
   <script>
 
-function getMax(arr) {
-    var max = 0;
-    for (var i = 0; i < arr.length; i++) {
-    	// skip the all cancertype
-    	if (arr[i]['cancertype'] == 'all') {
-    		continue;
-    	}
-        var currsum = arr[i]['mut'] + arr[i]['del'] + arr[i]['amp'];
-        if (max == 0 || currsum > max) {
-        	max = currsum;
-        }
-    }
-    return max;
-}
+var gene = document.getElementById("fname").value;
 
+console.log(gene);
 
-var colors = ['#FBB65B', '#513551', '#de3163'];
-
-d3.json('/getgene/', function(error, data) {
+d3.json('/getgene/' + gene, function(error, data) {
 	createPic(data);
 })
-// get from api allCTdistribution (sga)
-// var data = [{"mut": 95, "cancertype": "BLCA", "del": 5, "amp": 0}, {"mut": 245, "cancertype": "BRCA", "del": 6, "amp": 0}, {"mut": 104, "cancertype": "COAD", "del": 2, "amp": 0}, {"mut": 129, "cancertype": "ESCA", "del": 2, "amp": 0}, {"mut": 66, "cancertype": "GBM", "del": 5, "amp": 0}, {"mut": 316, "cancertype": "HNSC", "del": 3, "amp": 1}, {"mut": 17, "cancertype": "KIRC", "del": 0, "amp": 0}, {"mut": 4, "cancertype": "KIRP", "del": 0, "amp": 0}, {"mut": 41, "cancertype": "LIHC", "del": 2, "amp": 0}, {"mut": 186, "cancertype": "LUAD", "del": 3, "amp": 0}, {"mut": 108, "cancertype": "LUSC", "del": 3, "amp": 0}, {"mut": 269, "cancertype": "OV", "del": 2, "amp": 4}, {"mut": 44, "cancertype": "PRAD", "del": 33, "amp": 0}, {"mut": 57, "cancertype": "READ", "del": 0, "amp": 0}, {"mut": 80, "cancertype": "STAD", "del": 3, "amp": 0}, {"mut": 41, "cancertype": "UCEC", "del": 0, "amp": 0}, {"mut": 1802, "cancertype": "all", "del": 3, "amp": 4}];
 
-//var sub_width = (width - margin_left - margin_right) / 17; // 16 + 1 with all pancancer type
-function createPic(data) {
-	var sub_width = 50;
-	var max = getMax(data);
-
-	console.log(max);
-	// rescale the length for each bar
-
-	var barScale = d3.scaleLinear()
-					.domain([0, max])
-					.range([0, sub_width]);
-
-	var total_max = data[16]['mut'] + data[15]['del'] + data[15]['amp'];
-	var totalScale = d3.scaleLinear()
-						.domain([0, total_max])
-						.range([0, sub_width]);
-
-	var stack = d3.stack()
-	  .keys(['mut', 'amp', 'del']);
-
-	var stackedSeries = stack(data);
-
-
-	// Create a g element for each series
-	var g = d3.select('g')
-		.selectAll('g.series')
-		.data(stackedSeries)
-		.enter()
-		.append('g')
-		.classed('series', true)
-	//	.attr('class', function(d, i) {
-	//		return d3.select(this).attr('class')  + " " + d[0]['data']['day'];
-	//	})
-		.style('fill', function(d, i) {
-			return colors[i];
-		});
-
-	// For each series create a rect element for each day
-	g.selectAll('rect')
-		.data(function(d) {
-			console.log(d)
-			return d;
-		})
-		.enter()
-		.append('rect')
-		.attr('width', function(d) {
-			if (d['data']['cancertype'] == 'all') {
-				return totalScale(d[1] - d[0]);
-			} else {
-				return barScale(d[1] - d[0]);
-			}
-		})
-		.attr('x', function(d, i) {
-			if (d['data']['cancertype'] == 'all') {
-				return totalScale(d[0]) + sub_width * i;
-			} else {
-				return barScale(d[0]) + sub_width * i; //+ stack_width * i;
-			}
-		})
-		.attr('class', function(d, i) {
-			return d3.select(this).attr('class') + " " + d['data']['cancertype'];
-		})
-		.attr('height', 19);
-
-}
 
   </script>
 </body>
